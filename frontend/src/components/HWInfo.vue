@@ -15,7 +15,7 @@
       <v-row>
         <v-col>
           <!-- WIP -->
-          <CPUPerCore title="CPU Usage" ref="cpuPerCoreChart" :threads="coreCount" />
+          <CPUPerCore title="CPU Usage" ref="CPUPerCoreRef" :threads="coreCount" :series="perCPUUsage"/>
         </v-col>
       </v-row>
       <v-row>
@@ -221,21 +221,26 @@ export default {
     CPUUsageAverage
   },
   data: () => {
-    return {
-      series: [{data: [0]}],
-    }
+    return {}
   },
   computed: {
-    ...mapState('hwInfo', ['hostInfo', 'cpuInfo', 'coreCount', 'os', 'arch', 'usages'])
+    ...mapState('hwInfo', ['hostInfo', 'cpuInfo', 'coreCount', 'os', 'arch', 'usages', 'perCPUUsage']),
   },
   mounted: function () {
     this.$store.dispatch('hwInfo/getHardwareInfo');
     Wails.Events.On("hwUsage", hwUsage => {
       if (hwUsage) {
-        this.$refs.cpuPerCoreChart.updateSeries(hwUsage.PerCPUUsage);
         this.$store.dispatch('hwInfo/updateHardwareUsages', hwUsage)
       }
     });
+  },
+  watch: {
+    perCPUUsage: {
+      deep: true,
+      handler(newV) {
+        this.$refs.CPUPerCoreRef.updateSeries(newV);
+      }
+    }
   }
 };
 </script>

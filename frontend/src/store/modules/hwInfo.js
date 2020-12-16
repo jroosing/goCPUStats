@@ -8,9 +8,11 @@ const getDefaultState = () => {
         coreCount: 0,
         os: "",
         arch: "",
+        perCPUUsage: [{data: [0]}],
 
         usages: {
             CPUAverage: 0,
+            PerCPUUsage: [],
             Mem: {
                 usedPercent: 0,
                 total: 0,
@@ -57,7 +59,20 @@ const mutations = {
     },
     [SET_HW_USAGES] (state, payload) {
         state.usages = payload;
-    }
+
+        let series = state.perCPUUsage;
+        state.perCPUUsage = [{data: [0]}];
+        payload.PerCPUUsage.forEach((core, index) => {
+            if (series[index] === undefined || (index === 0 && series[index].name !== "Thread 1")) {
+                series[index] = { name: 'Thread ' + (index + 1), data: [] };
+            }
+            if (series.length > 120) {
+                series = [{ data: [0] }];
+            }
+            series[index].data.push(core);
+        });
+        state.perCPUUsage = series;
+    },
 };
 
 const actions = {
@@ -73,8 +88,6 @@ const actions = {
         }
     }
 };
-
-
 
 export default {
     namespaced: true,
