@@ -15,15 +15,7 @@
       <v-row>
         <v-col>
           <!-- WIP -->
-          <CPUPerCore :threads="coreCount" series="perCoreSeries"/>
-          <v-card class="me-8" elevation="2" tile>
-            <v-card-title>CPU Usage</v-card-title>
-            <v-card-subtitle>CPU Usage over all cores / threads ({{coreCount}} in total)</v-card-subtitle>
-            <v-divider></v-divider>
-            <v-card-text>
-              <apexchart type="line" height="350" ref="chart" :options="chartOptions" :series="series"></apexchart>
-            </v-card-text>
-          </v-card>
+          <CPUPerCore title="CPU Usage" ref="cpuPerCoreChart" :threads="coreCount" />
         </v-col>
       </v-row>
       <v-row>
@@ -231,46 +223,6 @@ export default {
   data: () => {
     return {
       series: [{data: [0]}],
-      chartOptions: {
-        chart: {
-          id: 'realtime',
-          type: 'line',
-          animations: {
-            enabled: false,
-          },
-          toolbar: {
-            show: true
-          },
-          zoom: {
-            enabled: true
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        tooltip: {
-          enabled: false,
-        },
-        markers: {
-          size: 0
-        },
-        xaxis: {
-          type: "numeric",
-          range: 60,
-          labels: {
-            show: false,
-          },
-        },
-        yaxis: {
-          max: 100,
-        },
-        legend: {
-          show: true
-        },
-      },
     }
   },
   computed: {
@@ -280,16 +232,7 @@ export default {
     this.$store.dispatch('hwInfo/getHardwareInfo');
     Wails.Events.On("hwUsage", hwUsage => {
       if (hwUsage) {
-        hwUsage.PerCPUUsage.forEach((core, index) => {
-          if (this.series[index] === undefined || (index === 0 && this.series[index].name !== "Thread 1")) {
-            this.series[index] = { name: 'Thread ' + (index + 1), data: [] };
-          }
-          if (this.series.length > 120) {
-            this.series = [{ data: [0] }];
-          }
-          this.series[index].data.push(core);
-          this.$refs.chart.updateSeries(this.series);
-        });
+        this.$refs.cpuPerCoreChart.updateSeries(hwUsage.PerCPUUsage);
         this.$store.dispatch('hwInfo/updateHardwareUsages', hwUsage)
       }
     });
