@@ -3,43 +3,19 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-card class="me-8" elevation="2" tile>
-            <v-card-title>CPU Usage (avg)</v-card-title>
-            <v-card-subtitle>On {{ cpuInfo.cores }} core(s) and {{ coreCount }} thread(s)</v-card-subtitle>
-            <v-divider></v-divider>
-            <v-card-text>
-              <SemiRadialChart :percentage="[usages.CPUAverage]"/>
-            </v-card-text>
-          </v-card>
+          <CPUUsageAverage title="CPU Usage (avg)" :cores="cpuInfo.cores" :threads="coreCount" :percentage="usages.CPUAverage" />
         </v-col>
         <v-col>
-          <v-card class="me-8" elevation="2" tile>
-            <v-card-title>Memory Usage</v-card-title>
-            <v-card-subtitle>{{ (usages.Mem.used / 1073741824).toPrecision(4) }} /
-              {{ (usages.Mem.total / 1073741824).toPrecision(4) }} GB
-            </v-card-subtitle>
-            <v-divider></v-divider>
-            <v-card-text>
-              <!-- Most operating systems calculate gigabyte as 1073741824 = 1024*1024*1024 -->
-              <SemiRadialChart :percentage="[usages.Mem.usedPercent.toPrecision(2)]"/>
-            </v-card-text>
-          </v-card>
+          <MemoryUsage title="Memory Usage" :used="usages.Mem.used" :total="usages.Mem.total" :percentage="usages.Mem.usedPercent" />
         </v-col>
         <v-col>
-          <v-card class="me-8" elevation="2" tile>
-            <v-card-title>Swap Memory Usage</v-card-title>
-            <v-card-subtitle>{{ (usages.Swap.used / 1073741824).toPrecision(4) }} /
-              {{ (usages.Swap.total / 1073741824).toPrecision(4) }} GB
-            </v-card-subtitle>
-            <v-divider></v-divider>
-            <v-card-text>
-              <SemiRadialChart :percentage="[usages.Swap.usedPercent.toPrecision(2)]"/>
-            </v-card-text>
-          </v-card>
+          <MemoryUsage title="Swap Memory Usage" :used="usages.Swap.used" :total="usages.Swap.total" :percentage="usages.Swap.usedPercent" />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
+          <!-- WIP -->
+          <CPUPerCore :threads="coreCount" series="perCoreSeries"/>
           <v-card class="me-8" elevation="2" tile>
             <v-card-title>CPU Usage</v-card-title>
             <v-card-subtitle>CPU Usage over all cores / threads ({{coreCount}} in total)</v-card-subtitle>
@@ -240,13 +216,17 @@
 </template>
 
 <script>
-import SemiRadialChart from "@/components/SemiRadialChart";
+import CPUUsageAverage from "@/components/CPUUsageAverage";
 import Wails from '@wailsapp/runtime';
 import {mapState} from "vuex";
+import MemoryUsage from "@/components/MemoryUsage";
+import CPUPerCore from "@/components/CPUPerCore";
 
 export default {
   components: {
-    SemiRadialChart,
+    CPUPerCore,
+    MemoryUsage,
+    CPUUsageAverage
   },
   data: () => {
     return {
