@@ -1,7 +1,7 @@
 <template>
   <v-card class="me-8" elevation="2" tile>
     <v-card-title>{{ title }}</v-card-title>
-    <v-card-subtitle>On {{ cores }} core(s) and {{ threads }} thread(s)</v-card-subtitle>
+    <v-card-subtitle>On {{ physicalCores }} core(s) and {{ logicalCores }} thread(s)</v-card-subtitle>
     <v-divider></v-divider>
     <v-card-text>
       <SemiRadialChart :percentage="[percentage]"/>
@@ -19,8 +19,8 @@ export default {
   },
   props: {
     title: String,
-    cores: Number,
-    threads: Number,
+    physicalCores: Number,
+    logicalCores: Number,
     percentage: Number,
   }
 }

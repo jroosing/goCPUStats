@@ -18,20 +18,20 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Total cores
+              Total physical cores
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ cpuInfo.cores }}
+              {{ cpuInfo.physicalCores }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Total threads
+              Total logical cores
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ cpuThreadCount }}
+              {{ cpuInfo.logicalCores }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -48,10 +48,10 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Operating System
+              Mhz
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ os }}
+              {{ cpuInfo.mhz }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -61,7 +61,7 @@
               Architecture
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ arch }}
+              {{ cpuInfo.architecture }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -81,7 +81,7 @@ export default {
     cpuThreadCount: Number,
   },
   computed: {
-    ...mapState('hwInfo', ['cpuInfo', 'arch', 'os']),
+    ...mapState('hwInfo', ['cpuInfo']),
   },
 }
 </script>

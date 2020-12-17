@@ -3,18 +3,18 @@
     <v-container>
       <v-row>
         <v-col>
-          <CPUUsageChart title="CPU Usage (avg)" :cores="cpuInfo.cores" :threads="cpuThreadCount" :percentage="cpuAvg" />
+          <CPUUsageChart title="CPU Usage (avg)" :physical-cores="cpuInfo.physicalCores" :logical-cores="cpuInfo.logicalCores" :percentage="cpuLoad.usedPercent" />
         </v-col>
         <v-col>
-          <MemoryUsageChart title="Memory Usage" :used="mem.used" :total="mem.total" :percentage="mem.usedPercent" />
+          <MemoryUsageChart title="Memory Usage" :used="memoryLoad.used" :total="memoryLoad.total" :percentage="memoryLoad.usedPercent" />
         </v-col>
         <v-col>
-          <MemoryUsageChart title="Swap Memory Usage" :used="swap.used" :total="swap.total" :percentage="swap.usedPercent" />
+          <MemoryUsageChart title="Swap Memory Usage" :used="swapMemoryLoad.used" :total="swapMemoryLoad.total" :percentage="swapMemoryLoad.usedPercent" />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <CPUThreadUsagesChart title="CPU Usage" ref="CPUPerCoreRef" :threads="cpuThreadCount"/>
+          <CPUThreadUsagesChart title="CPU Usage" :logical-cores="cpuInfo.logicalCores" />
         </v-col>
       </v-row>
       <v-row>
@@ -22,11 +22,11 @@
           <HostInfoCard title="Host" subtitle="Host information" />
         </v-col>
         <v-col>
-          <CPUInfoCard title="CPU" subtitle="CPU Information" :threads="cpuThreadCount"/>
+          <CPUInfoCard title="CPU" subtitle="CPU Information" />
         </v-col>
-        <v-col>
-          <TemperatureInfoCard title="Temperatures" subtitle="Hardware temperature information" />
-        </v-col>
+<!--        <v-col>-->
+<!--          <TemperatureInfoCard title="Temperatures" subtitle="Hardware temperature information" />-->
+<!--        </v-col>-->
       </v-row>
     </v-container>
   </v-app>
@@ -40,11 +40,11 @@ import MemoryUsageChart from "@/components/MemoryUsageChart";
 import CPUThreadUsagesChart from "@/components/CPUThreadUsagesChart";
 import HostInfoCard from "@/components/HostInfoCard";
 import CPUInfoCard from "@/components/CPUInfoCard";
-import TemperatureInfoCard from "@/components/TemperatureInfoCard";
+//import TemperatureInfoCard from "@/components/TemperatureInfoCard";
 
 export default {
   components: {
-    TemperatureInfoCard,
+    //TemperatureInfoCard,
     CPUInfoCard,
     HostInfoCard,
     CPUThreadUsagesChart,
@@ -55,7 +55,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapState('hwInfo', ['cpuInfo', 'cpuAvg', 'cpuThreadCount','mem', 'swap']),
+    ...mapState('hwInfo', ['cpuInfo', 'cpuLoad', 'memoryLoad', 'swapMemoryLoad']),
   },
   mounted: function () {
     this.$store.dispatch('hwInfo/getHardwareInfo');

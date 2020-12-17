@@ -3,41 +3,25 @@ export const SET_HW_USAGES = 'SET_HW_USAGES';
 
 const getDefaultState = () => {
     return {
-        hostInfo: {},
         cpuInfo: {},
-        cpuThreadCount: 0,
-        os: "",
-        arch: "",
-        cpuThreadUsages: [{data: [0]}],
+        hostInfo: {},
 
-        cpuAvg: 0,
-        mem: {
+        cpuLoad: {
             usedPercent: 0,
+            usedPerLogicalCorePercent: [],
+        },
+        memoryLoad: {
             total: 0,
             used: 0,
-        },
-        swap: {
             usedPercent: 0,
+        },
+        swapMemoryLoad: {
             total: 0,
             used: 0,
+            usedPercent: 0,
         },
-        temp: [
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0},
-            {sensorTemperature: 0}
-        ]
+
+        temps: {},
     };
 };
 
@@ -45,30 +29,13 @@ const state = getDefaultState();
 
 const mutations = {
     [SET_HW_STATS] (state, payload) {
-        state.cpuInfo = payload.cpuInfo[0];
-        state.cpuThreadCount = payload.cpuThreadCount;
-        state.os = payload.operatingSystem;
-        state.arch = payload.architecture;
-        state.hostInfo = payload.hostInfo;
+        state.cpuInfo = payload.cpu;
+        state.hostInfo = payload.host;
     },
     [SET_HW_USAGES] (state, payload) {
-        state.cpuAvg = payload.cpuAvg;
-        state.mem = payload.mem;
-        state.swap = payload.swap;
-        state.temp = payload.temp;
-
-        let series = state.cpuThreadUsages;
-        state.cpuThreadUsages = [{data: [0]}];
-        payload.cpuThreadUsages.forEach((core, index) => {
-            if (series[index] === undefined || (index === 0 && series[index].name !== "Thread 1")) {
-                series[index] = { name: 'Thread ' + (index + 1), data: [] };
-            }
-            if (series.length > 120) {
-                series = [{ data: [0] }];
-            }
-            series[index].data.push(core);
-        });
-        state.cpuThreadUsages = series;
+        state.cpuLoad = payload.cpuLoad;
+        state.memoryLoad = payload.memLoad;
+        state.swapMemoryLoad = payload.swapMemLoad;
     },
 };
 

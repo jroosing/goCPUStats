@@ -1,10 +1,10 @@
 <template>
   <v-card class="me-8" elevation="2" tile>
     <v-card-title>{{ title }}</v-card-title>
-    <v-card-subtitle>CPU Usage over all cores / threads ({{ threads }} in total)</v-card-subtitle>
+    <v-card-subtitle>CPU Usage over all cores / threads ({{ logicalCores }} in total)</v-card-subtitle>
     <v-divider></v-divider>
     <v-card-text>
-      <apexchart type="line" height="350" ref="chart" :options="chartOptions" :series="chartSeries"></apexchart>
+      <apexchart type="line" height="350" ref="chart" :options="chartOptions" :series="series"></apexchart>
     </v-card-text>
   </v-card>
 </template>
@@ -16,15 +16,15 @@ export default {
   name: "CPUThreadUsagesChart",
   components: {},
   props: {
-    threads: Number,
+    logicalCores: Number,
     title: String,
   },
   computed: {
-    ...mapState('hwInfo', ['cpuThreadUsages']),
+    ...mapState('hwInfo', ['cpuLoad']),
   },
   data: () => {
     return {
-      chartSeries: [{data: [0]}],
+      series: [{data: [0]}],
       chartOptions: {
         chart: {
           id: 'realtime',
@@ -68,11 +68,21 @@ export default {
     }
   },
   watch: {
-    cpuThreadUsages: {
+    'cpuLoad.usedPerLogicalCorePercent': {
       deep: true,
-      handler(newV) {
-        this.chartSeries = newV;
-        this.$refs.chart.updateSeries(this.chartSeries);
+      handler(newValues) {
+        let seriesState = this.series;
+        newValues.forEach((core, index) => {
+            if (seriesState[index] === undefined || (index === 0 && seriesState[index].name !== "Thread 1")) {
+              seriesState[index] = { name: 'Thread ' + (index + 1), data: [] };
+            }
+            if (seriesState.length > 120) {
+              seriesState = [{ data: [0] }];
+            }
+          seriesState[index].data.push(core);
+        });
+        this.series = seriesState;
+        this.$refs.chart.updateSeries(this.series);
       }
     }
   }
