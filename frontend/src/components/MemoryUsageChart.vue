@@ -5,7 +5,6 @@
     </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-text>
-      <!-- Most operating systems calculate gigabyte as 1073741824 = 1024*1024*1024 -->
       <SemiRadialChart :percentage="[percentage.toPrecision(2)]"/>
     </v-card-text>
   </v-card>
