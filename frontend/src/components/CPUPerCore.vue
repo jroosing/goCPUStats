@@ -20,7 +20,7 @@ export default {
     title: String,
   },
   computed: {
-    ...mapState('hwInfo', ['perCPUUsage']),
+    ...mapState('hwInfo', ['cpuThreadUsages']),
   },
   data: () => {
     return {
@@ -68,7 +68,7 @@ export default {
     }
   },
   watch: {
-    perCPUUsage: {
+    cpuThreadUsages: {
       deep: true,
       handler(newV) {
         this.chartSeries = newV;

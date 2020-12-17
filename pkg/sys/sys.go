@@ -17,19 +17,20 @@ type Stats struct {
 }
 
 type HardwareInfo struct {
-	HostInfo  *host.InfoStat
-	CPUInfo   []cpu.InfoStat
-	CoreCount int
-	OS        string
-	Arch      string
+	HostInfo        *host.InfoStat `json:"hostInfo"`
+	OperatingSystem string         `json:"operatingSystem"`
+
+	CPUInfo         []cpu.InfoStat `json:"cpuInfo"`
+	CPUThreadCount  int            `json:"cpuThreadCount"`
+	CPUArchitecture string         `json:"architecture"`
 }
 
 type HardwareUsage struct {
-	CPUAverage int
-	PerCPUUsage []int
-	Swap       *mem.SwapMemoryStat
-	Mem        *mem.VirtualMemoryStat
-	Temp       []host.TemperatureStat
+	CPUAvg          int                    `json:"cpuAvg"`
+	CPUThreadUsages []int                  `json:"cpuThreadUsages"`
+	Swap            *mem.SwapMemoryStat    `json:"swap"`
+	Mem             *mem.VirtualMemoryStat `json:"mem"`
+	Temp            []host.TemperatureStat `json:"temp"`
 }
 
 // WailsInit .
@@ -39,7 +40,7 @@ func (s *Stats) WailsInit(runtime *wails.Runtime) error {
 	go func() {
 		for {
 			runtime.Events.Emit("hwUsage", s.GetHardwareUsage())
-			time.Sleep(1 * time.Second)
+			time.Sleep(20 * time.Second)
 		}
 	}()
 
@@ -48,21 +49,21 @@ func (s *Stats) WailsInit(runtime *wails.Runtime) error {
 
 func (s *Stats) GetHardwareUsage() *HardwareUsage {
 	return &HardwareUsage{
-		CPUAverage: s.GetCPUUsage(),
-		PerCPUUsage: s.GetPerCPUUsage(),
-		Swap:       s.GetSwapMemory(),
-		Mem:        s.GetMemory(),
-		Temp:       s.GetTempStats(),
+		CPUAvg:          s.GetCPUUsage(),
+		CPUThreadUsages: s.GetCPUThreadUsages(),
+		Swap:            s.GetSwapMemory(),
+		Mem:             s.GetMemory(),
+		Temp:            s.GetTempStats(),
 	}
 }
 
 func (s *Stats) GetHardwareInfo() *HardwareInfo {
 	return &HardwareInfo{
-		HostInfo:  s.GetHostInfo(),
-		CPUInfo:   s.GetCPUInfo(),
-		OS:        runtime.GOOS,
-		Arch:      runtime.GOARCH,
-		CoreCount: s.GetCPUCount(),
+		HostInfo:        s.GetHostInfo(),
+		CPUInfo:         s.GetCPUInfo(),
+		OperatingSystem: runtime.GOOS,
+		CPUArchitecture: runtime.GOARCH,
+		CPUThreadCount:  s.GetCPUCount(),
 	}
 }
 
@@ -86,7 +87,7 @@ func (s *Stats) GetCPUUsage() int {
 	return int(math.Round(percent[0]))
 }
 
-func (s *Stats) GetPerCPUUsage() (perCPUUsage []int) {
+func (s *Stats) GetCPUThreadUsages() (perCPUUsage []int) {
 	percentMap, err := cpu.Percent(1*time.Second, true)
 	if err != nil {
 		s.log.Errorf("unable to get per cpu percentage stats: %s", err.Error())

@@ -5,42 +5,39 @@ const getDefaultState = () => {
     return {
         hostInfo: {},
         cpuInfo: {},
-        coreCount: 0,
+        cpuThreadCount: 0,
         os: "",
         arch: "",
-        perCPUUsage: [{data: [0]}],
+        cpuThreadUsages: [{data: [0]}],
 
-        usages: {
-            CPUAverage: 0,
-            PerCPUUsage: [],
-            Mem: {
-                usedPercent: 0,
-                total: 0,
-                used: 0,
-            },
-            Swap: {
-                usedPercent: 0,
-                total: 0,
-                used: 0,
-            },
-            Temp: [
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0},
-                {sensorTemperature: 0}
-            ]
+        cpuAvg: 0,
+        mem: {
+            usedPercent: 0,
+            total: 0,
+            used: 0,
         },
+        swap: {
+            usedPercent: 0,
+            total: 0,
+            used: 0,
+        },
+        temp: [
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0},
+            {sensorTemperature: 0}
+        ]
     };
 };
 
@@ -48,21 +45,21 @@ const state = getDefaultState();
 
 const mutations = {
     [SET_HW_STATS] (state, payload) {
-        const { OS, Arch, CoreCount, CPUInfo, HostInfo } = payload;
-        if (CPUInfo.length > 0) {
-            state.cpuInfo = CPUInfo[0];
-        }
-        state.coreCount = CoreCount;
-        state.os = OS;
-        state.arch = Arch;
-        state.hostInfo = HostInfo;
+        state.cpuInfo = payload.cpuInfo[0];
+        state.cpuThreadCount = payload.cpuThreadCount;
+        state.os = payload.operatingSystem;
+        state.arch = payload.architecture;
+        state.hostInfo = payload.hostInfo;
     },
     [SET_HW_USAGES] (state, payload) {
-        state.usages = payload;
+        state.cpuAvg = payload.cpuAvg;
+        state.mem = payload.mem;
+        state.swap = payload.swap;
+        state.temp = payload.temp;
 
-        let series = state.perCPUUsage;
-        state.perCPUUsage = [{data: [0]}];
-        payload.PerCPUUsage.forEach((core, index) => {
+        let series = state.cpuThreadUsages;
+        state.cpuThreadUsages = [{data: [0]}];
+        payload.cpuThreadUsages.forEach((core, index) => {
             if (series[index] === undefined || (index === 0 && series[index].name !== "Thread 1")) {
                 series[index] = { name: 'Thread ' + (index + 1), data: [] };
             }
@@ -71,7 +68,7 @@ const mutations = {
             }
             series[index].data.push(core);
         });
-        state.perCPUUsage = series;
+        state.cpuThreadUsages = series;
     },
 };
 
