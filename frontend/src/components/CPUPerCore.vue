@@ -10,13 +10,17 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "CPUPerCore",
   components: {},
   props: {
     threads: Number,
     title: String,
-    series: Array,
+  },
+  computed: {
+    ...mapState('hwInfo', ['perCPUUsage']),
   },
   data: () => {
     return {
@@ -63,10 +67,13 @@ export default {
       },
     }
   },
-  methods: {
-    updateSeries(series) {
-      this.chartSeries = series;
-      this.$refs.chart.updateSeries(this.chartSeries);
+  watch: {
+    perCPUUsage: {
+      deep: true,
+      handler(newV) {
+        this.chartSeries = newV;
+        this.$refs.chart.updateSeries(this.chartSeries);
+      }
     }
   }
 }

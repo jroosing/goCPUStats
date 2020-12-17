@@ -15,7 +15,7 @@
       <v-row>
         <v-col>
           <!-- WIP -->
-          <CPUPerCore title="CPU Usage" ref="CPUPerCoreRef" :threads="coreCount" :series="perCPUUsage"/>
+          <CPUPerCore title="CPU Usage" ref="CPUPerCoreRef" :threads="coreCount"/>
         </v-col>
       </v-row>
       <v-row>
@@ -234,13 +234,5 @@ export default {
       }
     });
   },
-  watch: {
-    perCPUUsage: {
-      deep: true,
-      handler(newV) {
-        this.$refs.CPUPerCoreRef.updateSeries(newV);
-      }
-    }
-  }
 };
 </script>
