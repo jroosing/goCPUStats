@@ -13,7 +13,7 @@
 import SemiRadialChart from "@/components/SemiRadialChart";
 
 export default {
-  name: "CPUUsageAverage",
+  name: "CPUUsageChart",
   components: {
     SemiRadialChart,
   },

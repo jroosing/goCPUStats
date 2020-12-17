@@ -16,7 +16,7 @@ import SemiRadialChart from "@/components/SemiRadialChart";
 import humanByteSize from "@/util/byte-utils";
 
 export default {
-  name: "MemoryUsage",
+  name: "MemoryUsageChart",
   components: {
     SemiRadialChart,
   },

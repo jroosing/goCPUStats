@@ -13,7 +13,7 @@
 import {mapState} from "vuex";
 
 export default {
-  name: "CPUPerCore",
+  name: "CPUThreadUsagesChart",
   components: {},
   props: {
     threads: Number,

@@ -3,18 +3,18 @@
     <v-container>
       <v-row>
         <v-col>
-          <CPUUsageAverage title="CPU Usage (avg)" :cores="cpuInfo.cores" :threads="cpuThreadCount" :percentage="cpuAvg" />
+          <CPUUsageChart title="CPU Usage (avg)" :cores="cpuInfo.cores" :threads="cpuThreadCount" :percentage="cpuAvg" />
         </v-col>
         <v-col>
           <MemoryUsage title="Memory Usage" :used="mem.used" :total="mem.total" :percentage="mem.usedPercent" />
         </v-col>
         <v-col>
-          <MemoryUsage title="Swap Memory Usage" :used="swap.used" :total="swap.total" :percentage="swap.usedPercent" />
+          <MemoryUsageChart title="Swap Memory Usage" :used="swap.used" :total="swap.total" :percentage="swap.usedPercent" />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <CPUPerCore title="CPU Usage" ref="CPUPerCoreRef" :threads="cpuThreadCount"/>
+          <CPUThreadUsagesChart title="CPU Usage" ref="CPUPerCoreRef" :threads="cpuThreadCount"/>
         </v-col>
       </v-row>
       <v-row>
@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import CPUUsageAverage from "@/components/CPUUsageAverage";
+import CPUUsageChart from "@/components/CPUUsageChart";
 import Wails from '@wailsapp/runtime';
 import {mapState} from "vuex";
-import MemoryUsage from "@/components/MemoryUsage";
-import CPUPerCore from "@/components/CPUPerCore";
+import MemoryUsageChart from "@/components/MemoryUsageChart";
+import CPUThreadUsagesChart from "@/components/CPUThreadUsagesChart";
 import HostInfoCard from "@/components/HostInfoCard";
 import CPUInfoCard from "@/components/CPUInfoCard";
 import TemperatureInfoCard from "@/components/TemperatureInfoCard";
@@ -47,9 +47,9 @@ export default {
     TemperatureInfoCard,
     CPUInfoCard,
     HostInfoCard,
-    CPUPerCore,
-    MemoryUsage,
-    CPUUsageAverage
+    CPUThreadUsagesChart,
+    MemoryUsageChart,
+    CPUUsageChart
   },
   data: () => {
     return {}
