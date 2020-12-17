@@ -6,7 +6,7 @@
           <CPUUsageChart title="CPU Usage (avg)" :cores="cpuInfo.cores" :threads="cpuThreadCount" :percentage="cpuAvg" />
         </v-col>
         <v-col>
-          <MemoryUsage title="Memory Usage" :used="mem.used" :total="mem.total" :percentage="mem.usedPercent" />
+          <MemoryUsageChart title="Memory Usage" :used="mem.used" :total="mem.total" :percentage="mem.usedPercent" />
         </v-col>
         <v-col>
           <MemoryUsageChart title="Swap Memory Usage" :used="swap.used" :total="swap.total" :percentage="swap.usedPercent" />
