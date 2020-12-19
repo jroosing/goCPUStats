@@ -3,6 +3,7 @@ package sys
 import (
 	"time"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/wailsapp/wails"
 )
 
@@ -17,7 +18,11 @@ func (s *Stats) WailsInit(runtime *wails.Runtime) error {
 
 	go func() {
 		for {
-			runtime.Events.Emit("hwUsage", s.GetHardwareUsage())
+			bytes, err := proto.Marshal(s.GetHardwareUsage())
+			if err != nil {
+				s.log.Errorf("could not marshal hardware load to proto %v")
+			}
+			runtime.Events.Emit("hwUsage", bytes)
 			time.Sleep(1 * time.Second)
 		}
 	}()

@@ -11,6 +11,8 @@
     "@wailsapp/runtime": "^1.0.10",
     "apexcharts": "^3.22.3",
     "core-js": "^3.6.4",
+    "google-protobuf": "^3.14.0",
+    "protobufjs": "^6.10.2",
     "regenerator-runtime": "^0.13.3",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",

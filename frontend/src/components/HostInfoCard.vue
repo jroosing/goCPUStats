@@ -11,7 +11,7 @@
               Hostname
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ hostInfo.hostname }}
+              {{ hostInfo.hostName }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>

@@ -5,6 +5,8 @@ package temp
 import (
 	"fmt"
 	"math"
+
+	pb "cpustats/proto/github.com/jroosing/cpustats/grpc/v1/sys"
 )
 
 const (
@@ -14,10 +16,10 @@ const (
 	diskTempSensorKey = "TH0P"
 )
 
-func GetCpuTemp() (TempStats, error) {
+func GetCpuTemp() (*pb.TempStats, error) {
 	if temps == nil {
 		if err := loadTemperatures(); err != nil {
-			return TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
+			return &pb.TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
 		}
 	}
 
@@ -25,19 +27,19 @@ func GetCpuTemp() (TempStats, error) {
 		if t.SensorKey != cpuTempSensorKey {
 			continue
 		}
-		return TempStats{
-			Temperature: int16(math.Round(t.Temperature)),
-			High: int16(math.Round(t.High)),
-			Critical: int16(math.Round(t.Critical)),
+		return &pb.TempStats{
+			Temperature: int32(math.Round(t.Temperature)),
+			High: int32(math.Round(t.High)),
+			Critical: int32(math.Round(t.Critical)),
 		}, nil
 	}
-	return TempStats{}, fmt.Errorf("could not find cpu temps")
+	return &pb.TempStats{}, fmt.Errorf("could not find cpu temps")
 }
 
-func GetGpuTemp() (TempStats, error) {
+func GetGpuTemp() (*pb.TempStats, error) {
 	if temps == nil {
 		if err := loadTemperatures(); err != nil {
-			return TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
+			return &pb.TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
 		}
 	}
 
@@ -45,19 +47,19 @@ func GetGpuTemp() (TempStats, error) {
 		if t.SensorKey != gpuTempSensorKey {
 			continue
 		}
-		return TempStats{
-			Temperature: int16(math.Round(t.Temperature)),
-			High: int16(math.Round(t.High)),
-			Critical: int16(math.Round(t.Critical)),
+		return &pb.TempStats{
+			Temperature: int32(math.Round(t.Temperature)),
+			High: int32(math.Round(t.High)),
+			Critical: int32(math.Round(t.Critical)),
 		}, nil
 	}
-	return TempStats{}, fmt.Errorf("could not find cpu temps")
+	return &pb.TempStats{}, fmt.Errorf("could not find cpu temps")
 }
 
-func GetDiskTemp() (TempStats, error) {
+func GetDiskTemp() (*pb.TempStats, error) {
 	if temps == nil {
 		if err := loadTemperatures(); err != nil {
-			return TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
+			return &pb.TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
 		}
 	}
 
@@ -65,19 +67,19 @@ func GetDiskTemp() (TempStats, error) {
 		if t.SensorKey != diskTempSensorKey {
 			continue
 		}
-		return TempStats{
-			Temperature: int16(math.Round(t.Temperature)),
-			High: int16(math.Round(t.High)),
-			Critical: int16(math.Round(t.Critical)),
+		return &pb.TempStats{
+			Temperature: int32(math.Round(t.Temperature)),
+			High: int32(math.Round(t.High)),
+			Critical: int32(math.Round(t.Critical)),
 		}, nil
 	}
-	return TempStats{}, fmt.Errorf("could not find cpu temps")
+	return &pb.TempStats{}, fmt.Errorf("could not find cpu temps")
 }
 
-func GetMemoryTemp() (TempStats, error) {
+func GetMemoryTemp() (*pb.TempStats, error) {
 	if temps == nil {
 		if err := loadTemperatures(); err != nil {
-			return TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
+			return &pb.TempStats{}, fmt.Errorf("could not load temperatures: %w", err)
 		}
 	}
 
@@ -85,11 +87,11 @@ func GetMemoryTemp() (TempStats, error) {
 		if t.SensorKey != memoryTempSensorKey {
 			continue
 		}
-		return TempStats{
-			Temperature: int16(math.Round(t.Temperature)),
-			High: int16(math.Round(t.High)),
-			Critical: int16(math.Round(t.Critical)),
+		return &pb.TempStats{
+			Temperature: int32(math.Round(t.Temperature)),
+			High: int32(math.Round(t.High)),
+			Critical: int32(math.Round(t.Critical)),
 		}, nil
 	}
-	return TempStats{}, fmt.Errorf("could not find cpu temps")
+	return &pb.TempStats{}, fmt.Errorf("could not find cpu temps")
 }

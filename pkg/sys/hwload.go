@@ -9,35 +9,11 @@ import (
 	"github.com/shirou/gopsutil/v3/mem"
 
 	"cpustats/pkg/sys/temp"
+	pb "cpustats/proto/github.com/jroosing/cpustats/grpc/v1/sys"
 )
 
-type HardwareLoad struct {
-	Cpu     CpuLoad              `json:"cpuLoad"`
-	Mem     MemoryLoad           `json:"memLoad"`
-	SwapMem MemoryLoad           `json:"swapMemLoad"`
-	Temps   HardwareTemperatures `json:"temps"`
-}
-
-type CpuLoad struct {
-	UsedPercent               int   `json:"usedPercent"`
-	UsedPerLogicalCorePercent []int `json:"usedPerLogicalCorePercent"`
-}
-
-type MemoryLoad struct {
-	Total       uint64 `json:"total"`
-	Used        uint64 `json:"used"`
-	UsedPercent int    `json:"usedPercent"`
-}
-
-type HardwareTemperatures struct {
-	Cpu    temp.TempStats
-	Gpu    temp.TempStats
-	Memory temp.TempStats
-	Disk   temp.TempStats
-}
-
-func (s *Stats) GetHardwareUsage() *HardwareLoad {
-	return &HardwareLoad{
+func (s *Stats) GetHardwareUsage() *pb.HardwareLoad {
+	return &pb.HardwareLoad{
 		Cpu:     s.getCpuLoad(),
 		Mem:     s.GetMemoryLoad(),
 		SwapMem: s.GetSwapMemoryLoad(),
@@ -45,8 +21,8 @@ func (s *Stats) GetHardwareUsage() *HardwareLoad {
 	}
 }
 
-func (s *Stats) getTemperatures() HardwareTemperatures {
-	hwTemp := HardwareTemperatures{}
+func (s *Stats) getTemperatures() *pb.HardwareTemperatures {
+	hwTemp := &pb.HardwareTemperatures{}
 
 	c, err := temp.GetCpuTemp()
 	if err != nil {
@@ -76,15 +52,15 @@ func (s *Stats) getTemperatures() HardwareTemperatures {
 }
 
 // GetCPUUsage .
-func (s *Stats) getCpuLoad() CpuLoad {
+func (s *Stats) getCpuLoad() *pb.CpuLoad {
 	percent, err := cpu.Percent(1*time.Second, false)
 	if err != nil {
 		s.log.Errorf("unable to get cpu stats: %s", err.Error())
-		return CpuLoad{}
+		return &pb.CpuLoad{}
 	}
 
-	cpuLoad := CpuLoad{
-		UsedPercent: int(math.Round(percent[0])),
+	cpuLoad := &pb.CpuLoad{
+		UsedPercent: int32(math.Round(percent[0])),
 	}
 
 	perCpuPercent, err := cpu.Percent(1*time.Second, true)
@@ -92,38 +68,38 @@ func (s *Stats) getCpuLoad() CpuLoad {
 		s.log.Errorf("unable to get per cpu percentage stats: %s", err.Error())
 	}
 
-	var perLogicalCorePercent []int
+	var perLogicalCorePercent []int32
 	for _, v := range perCpuPercent {
-		perLogicalCorePercent = append(perLogicalCorePercent, int(math.Round(v)))
+		perLogicalCorePercent = append(perLogicalCorePercent, int32(math.Round(v)))
 	}
 	cpuLoad.UsedPerLogicalCorePercent = perLogicalCorePercent
 
 	return cpuLoad
 }
 
-func (s *Stats) GetSwapMemoryLoad() MemoryLoad {
+func (s *Stats) GetSwapMemoryLoad() *pb.MemoryLoad {
 	swapMem, err := mem.SwapMemory()
 	if err != nil {
 		s.log.Errorf("unable to retrieve swap memory: %s", err.Error())
-		return MemoryLoad{}
+		return &pb.MemoryLoad{}
 	}
-	return MemoryLoad{
+	return &pb.MemoryLoad{
 		Total:       swapMem.Total,
 		Used:        swapMem.Used,
-		UsedPercent: int(math.Round(swapMem.UsedPercent)),
+		UsedPercent: int32(math.Round(swapMem.UsedPercent)),
 	}
 }
 
 // GetMemory returns the realtime memory usage
-func (s *Stats) GetMemoryLoad() MemoryLoad {
+func (s *Stats) GetMemoryLoad() *pb.MemoryLoad {
 	vMem, err := mem.VirtualMemory()
 	if err != nil {
 		s.log.Errorf("unable to retrieve swap memory: %s", err.Error())
-		return MemoryLoad{}
+		return &pb.MemoryLoad{}
 	}
-	return MemoryLoad{
+	return &pb.MemoryLoad{
 		Total:       vMem.Total,
 		Used:        vMem.Used,
-		UsedPercent: int(math.Round(vMem.UsedPercent)),
+		UsedPercent: int32(math.Round(vMem.UsedPercent)),
 	}
 }

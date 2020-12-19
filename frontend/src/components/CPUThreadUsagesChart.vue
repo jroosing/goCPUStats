@@ -68,7 +68,7 @@ export default {
     }
   },
   watch: {
-    'cpuLoad.usedPerLogicalCorePercent': {
+    'cpuLoad.usedPerLogicalCorePercentList': {
       deep: true,
       handler(newValues) {
         let seriesState = this.series;
