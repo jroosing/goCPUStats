@@ -8,8 +8,6 @@ import (
 	"github.com/shirou/gopsutil/v3/host"
 )
 
-
-
 type HardwareInfo struct {
 	Host Host `json:"host"`
 	Cpu  Cpu  `json:"cpu"`
@@ -19,17 +17,18 @@ type Host struct {
 	Hostname           string `json:"hostname"`
 	Platform           string `json:"platform"`
 	PlatformFamily     string `json:"platformFamily"`
+	PlatformVersion    string `json:"platformVersion"`
 	KernelVersion      string `json:"kernelVersion"`
 	KernelArchitecture string `json:"kernelArchitecture"`
 	OperatingSystem    string `json:"operatingSystem"`
 }
 
 type Cpu struct {
-	ModelName     string `json:"modelName"`
-	PhysicalCores int    `json:"physicalCores"`
-	LogicalCores  int    `json:"logicalCores"`
-	CacheSize     int32  `json:"cacheSize"`
-	Architecture  string `json:"architecture"`
+	ModelName     string  `json:"modelName"`
+	PhysicalCores int     `json:"physicalCores"`
+	LogicalCores  int     `json:"logicalCores"`
+	CacheSize     int32   `json:"cacheSize"`
+	Architecture  string  `json:"architecture"`
 	Mhz           float64 `json:"mhz"`
 }
 
@@ -50,6 +49,7 @@ func (s *Stats) GetHostInfo() Host {
 		Hostname:           hostInfo.Hostname,
 		Platform:           hostInfo.Platform,
 		PlatformFamily:     hostInfo.PlatformFamily,
+		PlatformVersion:    hostInfo.PlatformVersion,
 		KernelVersion:      hostInfo.KernelVersion,
 		KernelArchitecture: hostInfo.KernelArch,
 		OperatingSystem:    runtime.GOOS,
@@ -66,10 +66,10 @@ func (s *Stats) GetCPUInfo() Cpu {
 	}
 
 	c := Cpu{
-		ModelName:     cpuInfo[0].ModelName,
-		CacheSize: cpuInfo[0].CacheSize,
+		ModelName:    cpuInfo[0].ModelName,
+		CacheSize:    cpuInfo[0].CacheSize,
 		Architecture: runtime.GOARCH,
-		Mhz: cpuInfo[0].Mhz,
+		Mhz:          cpuInfo[0].Mhz,
 	}
 
 	physicalCores, err := cpu.Counts(false)

@@ -18,7 +18,7 @@ func (s *Stats) WailsInit(runtime *wails.Runtime) error {
 	go func() {
 		for {
 			runtime.Events.Emit("hwUsage", s.GetHardwareUsage())
-			time.Sleep(3 * time.Second)
+			time.Sleep(1 * time.Second)
 		}
 	}()
 

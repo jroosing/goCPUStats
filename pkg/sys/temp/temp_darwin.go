@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	cpuTempSensorKey = "C.CPU_0_PROXIMITY"
-	gpuTempSensorKey = "C.GPU_0_PROXIMITY"
-	memoryTempSensorKey = "C.MEMORY_SLOTS_PROXIMITY"
-	diskTempSensorKey = "C.HARD_DRIVE_BAY"
+	cpuTempSensorKey = "TC0P"
+	gpuTempSensorKey = "TG0P"
+	memoryTempSensorKey = "TM0P"
+	diskTempSensorKey = "TH0P"
 )
 
 func GetCpuTemp() (TempStats, error) {
