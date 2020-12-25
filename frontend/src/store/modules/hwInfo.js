@@ -35,6 +35,7 @@ const getDefaultState = () => {
                 temperature: 0
             }
         },
+        cpuArch: "amd64",
     };
 };
 
@@ -45,6 +46,7 @@ const mutations = {
         try {
             let hwInfo = HardwareInfo.deserializeBinary(payload).toObject();
             state.cpuInfo = hwInfo.cpu;
+            state.cpuArch = hwInfo.cpu.architecture;
             state.hostInfo = hwInfo.host;
         } catch (err) {
             console.error(err);
@@ -80,7 +82,9 @@ const actions = {
 export default {
     namespaced: true,
     state,
-    getters: {},
+    getters: {
+        cpuArch: state => state.cpuArch
+    },
     actions,
     mutations,
 }

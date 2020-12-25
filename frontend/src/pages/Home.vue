@@ -38,7 +38,6 @@ import CPUThreadUsagesChart from "@/components/CPUThreadUsagesChart";
 import MemoryUsageChart from "@/components/MemoryUsageChart";
 import CPUUsageChart from "@/components/CPUUsageChart";
 import {mapState} from "vuex";
-import Wails from "@wailsapp/runtime";
 
 export default {
   name: "Home",
@@ -52,14 +51,6 @@ export default {
   },
   computed: {
     ...mapState('hwInfo', ['cpuInfo', 'cpuLoad', 'memoryLoad', 'swapMemoryLoad']),
-  },
-  mounted: function () {
-    this.$store.dispatch('hwInfo/getHardwareInfo');
-    Wails.Events.On("hwUsage", hwUsage => {
-      if (hwUsage) {
-        this.$store.dispatch('hwInfo/updateHardwareUsages', hwUsage)
-      }
-    });
   },
 }
 </script>
