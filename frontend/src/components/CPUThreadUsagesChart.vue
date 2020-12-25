@@ -4,7 +4,7 @@
     <v-card-subtitle>CPU Usage over all cores / threads ({{ logicalCores }} in total)</v-card-subtitle>
     <v-divider></v-divider>
     <v-card-text>
-      <apexchart type="line" height="350" ref="chart" :options="chartOptions" :series="series"></apexchart>
+      <apexchart type="line" :height="height" ref="chart" :options="chartOptions" :series="series"></apexchart>
     </v-card-text>
   </v-card>
 </template>
@@ -18,6 +18,12 @@ export default {
   props: {
     logicalCores: Number,
     title: String,
+    height: {
+      type: String,
+      default: function() {
+        return "350";
+      }
+    }
   },
   computed: {
     ...mapState('hwInfo', ['cpuLoad']),
@@ -43,7 +49,8 @@ export default {
           enabled: false
         },
         stroke: {
-          curve: 'smooth'
+          curve: 'smooth',
+          width: 3,
         },
         tooltip: {
           enabled: false,

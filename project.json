@@ -1,6 +1,6 @@
 {
- "name": "cpustats",
- "description": "Enter your project description",
+ "name": "goHWInfo",
+ "description": "Display stats about your hardware",
  "author": {
   "name": "Joey Roosing",
   "email": "kyura4k@gmail.com"

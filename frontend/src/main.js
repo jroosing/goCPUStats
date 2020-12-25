@@ -1,8 +1,12 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/dist/vuetify.min.css';
+
+import router from './router';
+
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
 import VueApexCharts from 'vue-apexcharts'
 import store from "./store/store";
 
@@ -28,6 +32,10 @@ Wails.Init(() => {
 				dark: true
 			}
 		}),
-		render: h => h(App)
+		render: h => h(App),
+		router,
+		mounted() {
+			this.$router.replace('/')
+		},
 	}).$mount("#app");
 });

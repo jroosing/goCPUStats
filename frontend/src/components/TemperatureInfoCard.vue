@@ -11,7 +11,7 @@
               CPU
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ temp[4].sensorTemperature }}&#8451;
+              {{ temperatures.cpu.temperature }}&#8451;
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -21,7 +21,7 @@
               GPU
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ temp[11].sensorTemperature }}&#8451;
+              {{ temperatures.gpu.temperature }}&#8451;
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -31,7 +31,33 @@
               Memory
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ temp[14].sensorTemperature }}&#8451;
+              {{ temperatures.memory.temperature }}&#8451;
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>
+              Disk
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ temperatures.disk.temperature }}&#8451;
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>
+            </v-list-item-title>
+            <v-list-item-subtitle>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>
+            </v-list-item-title>
+            <v-list-item-subtitle>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -50,11 +76,13 @@ export default {
     subtitle: String
   },
   computed: {
-    ...mapState('hwInfo', ['temp']),
+    ...mapState('hwInfo', ['temperatures']),
   },
 }
 </script>
 
 <style scoped>
-
+.v-card {
+  height: 100%;
+}
 </style>

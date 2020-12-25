@@ -86,5 +86,7 @@ export default {
 </script>
 
 <style scoped>
-
+.v-card {
+  height: 100%;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <apexchart type="radialBar" :options="chartOptions" :series="percentage"></apexchart>
+    <apexchart type="radialBar" :height="height" :options="chartOptions" :series="percentage"></apexchart>
   </v-container>
 </template>
 
@@ -9,6 +9,12 @@ export default {
   name: "SemiRadialChart.vue",
   props: {
     percentage: Array,
+    height: {
+      type: String,
+      default: function() {
+        return "250";
+      }
+    }
   },
   data: () => ({
     chartOptions: {

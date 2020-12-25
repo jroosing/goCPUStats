@@ -21,8 +21,20 @@ const getDefaultState = () => {
             used: 0,
             usedPercent: 0,
         },
-
-        temps: {},
+        temperatures: {
+            cpu: {
+                temperature: 0
+            },
+            disk: {
+                temperature: 0
+            },
+            gpu: {
+                temperature: 0
+            },
+            memory: {
+                temperature: 0
+            }
+        },
     };
 };
 
@@ -44,6 +56,7 @@ const mutations = {
             state.cpuLoad = hwLoad.cpu;
             state.memoryLoad = hwLoad.mem;
             state.swapMemoryLoad = hwLoad.swapMem;
+            state.temperatures = hwLoad.temps;
         } catch (err) {
             console.error(err);
         }
