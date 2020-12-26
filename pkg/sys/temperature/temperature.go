@@ -1,4 +1,4 @@
-package temp
+package temperature
 
 import "github.com/shirou/gopsutil/v3/host"
 

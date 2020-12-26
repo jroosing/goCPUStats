@@ -1,6 +1,6 @@
 // +build darwin
 
-package temp
+package temperature
 
 import (
 	"fmt"
