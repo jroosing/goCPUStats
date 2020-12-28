@@ -8,7 +8,7 @@ import (
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
 
-	"cpustats/pkg/sys/temp"
+	"cpustats/pkg/sys/temperature"
 	pb "cpustats/proto/github.com/jroosing/cpustats/grpc/v1/sys"
 )
 
