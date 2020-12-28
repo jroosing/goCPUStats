@@ -62,14 +62,7 @@ export default {
   computed: {
     ...mapGetters('hwInfo', ['cpuArch']),
     is64: function() {
-      console.log(this.cpuArch);
-      if (this.cpuArch === undefined) {
-        return true;
-      } else if (this.cpuArch.includes("64")) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.cpuArch && this.cpuArch.includes("64")
     }
   },
   mounted: function () {
