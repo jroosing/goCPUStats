@@ -9,6 +9,7 @@ import (
 	"github.com/shirou/gopsutil/v3/mem"
 
 	"cpustats/pkg/sys/temperature"
+
 	pb "cpustats/proto/github.com/jroosing/cpustats/grpc/v1/sys"
 )
 
@@ -24,27 +25,27 @@ func (s *Stats) GetHardwareUsage() *pb.HardwareLoad {
 func (s *Stats) getTemperatures() *pb.HardwareTemperatures {
 	hwTemp := &pb.HardwareTemperatures{}
 
-	c, err := temp.GetCpuTemp()
+	c, err := temperature.GetCpuTemp()
 	if err != nil {
 		s.log.Errorf("unable to get cpu temp: %v", err)
 	}
 	hwTemp.Cpu = c
 
-	g, err := temp.GetGpuTemp()
+	g, err := temperature.GetGpuTemp()
 	if err != nil {
-		s.log.Errorf("unable to get gpu temp: %v", err)
+		s.log.Errorf("unable to get gpu temperature: %v", err)
 	}
 	hwTemp.Gpu = g
 
-	d, err := temp.GetDiskTemp()
+	d, err := temperature.GetDiskTemp()
 	if err != nil {
-		s.log.Errorf("unable to get disk temp: %v", err)
+		s.log.Errorf("unable to get disk temperature: %v", err)
 	}
 	hwTemp.Disk = d
 
-	m, err := temp.GetMemoryTemp()
+	m, err := temperature.GetMemoryTemp()
 	if err != nil {
-		s.log.Errorf("unable to get memory temp: %v", err)
+		s.log.Errorf("unable to get memory temperature: %v", err)
 	}
 	hwTemp.Memory = m
 
